@@ -1,0 +1,140 @@
+/**
+ * Robot Framework Academy - Lesson 014 OPTIMIZED
+ * Generación de reportes básicos
+ */
+
+const LESSON_014 = {
+    id: 14,
+    title: "Generación de reportes básicos",
+    duration: "5 min",
+    level: "beginner",
+    section: "section-01",
+    type: "standard", // ✅ AGREGADO
+    content: `
+        <h2>📊 Reportes Básicos</h2>
+        
+        <h3>🤖 Tests reportes:</h3>
+        <pre><code class="robot">*** Variables ***
+\${REPORT_FILE}         report.html
+\${LOG_FILE}            log.html
+\${OUTPUT_FILE}         output.xml
+\${CUSTOM_REPORT}       qa_results_2025.html
+\${CUSTOM_LOG}          detailed_log_2025.html
+\${OUTPUT_DIR}          reports/qa-results
+\${TIMESTAMP}           2025-07-30
+\${LOG_LEVEL}           INFO
+
+*** Test Cases ***
+Test Report HTML Generation
+    Log                    📊 Testing report.html generation
+    Should Not Be Empty    \${REPORT_FILE}
+    Should Contain         \${REPORT_FILE}    report
+    Should Contain         \${REPORT_FILE}    .html
+    Should Be Equal        \${REPORT_FILE}    report.html
+    Should Not Be Empty    report.html
+    Should Contain         report.html    html
+    Should Be Equal        report.html    report.html
+    Should Contain         html    html
+    Should Not Be Empty    html
+    Should Be Equal        html    html
+    Log                    ✅ Report HTML validated
+
+Test Log HTML Generation
+    Log                    📝 Testing log.html generation
+    Should Not Be Empty    \${LOG_FILE}
+    Should Contain         \${LOG_FILE}    log
+    Should Contain         \${LOG_FILE}    .html
+    Should Be Equal        \${LOG_FILE}    log.html
+    Should Not Be Empty    \${LOG_LEVEL}
+    Should Contain         \${LOG_LEVEL}    INFO
+    Should Be Equal        \${LOG_LEVEL}    INFO
+    Should Not Be Empty    INFO
+    Should Be Equal        INFO    INFO
+    Should Contain         log.html    log
+    Log                    ✅ Log HTML validated
+
+Test Output XML Generation
+    Log                    🔧 Testing output.xml generation
+    Should Not Be Empty    \${OUTPUT_FILE}
+    Should Contain         \${OUTPUT_FILE}    output
+    Should Contain         \${OUTPUT_FILE}    .xml
+    Should Be Equal        \${OUTPUT_FILE}    output.xml
+    Should Not Be Empty    output.xml
+    Should Contain         output.xml    xml
+    Should Be Equal        output.xml    output.xml
+    Should Contain         xml    xml
+    Should Not Be Empty    xml
+    Should Be Equal        xml    xml
+    Log                    ✅ Output XML validated
+
+Test Custom Reports
+    Log                    🎨 Testing custom reports
+    Should Not Be Empty    \${CUSTOM_REPORT}
+    Should Contain         \${CUSTOM_REPORT}    qa_results
+    Should Contain         \${CUSTOM_REPORT}    2025
+    Should Be Equal        \${CUSTOM_REPORT}    qa_results_2025.html
+    Should Not Be Empty    \${CUSTOM_LOG}
+    Should Contain         \${CUSTOM_LOG}    detailed_log
+    Should Contain         \${CUSTOM_LOG}    2025
+    Should Be Equal        \${CUSTOM_LOG}    detailed_log_2025.html
+    Should Not Be Empty    \${TIMESTAMP}
+    Should Contain         \${TIMESTAMP}    2025
+    Log                    ✅ Custom reports validated
+
+Test OutputDir Configuration
+    Log                    📁 Testing outputdir configuration
+    Should Not Be Empty    \${OUTPUT_DIR}
+    Should Contain         \${OUTPUT_DIR}    reports
+    Should Contain         \${OUTPUT_DIR}    qa-results
+    Should Be Equal        \${OUTPUT_DIR}    reports/qa-results
+    Should Not Be Empty    reports/qa-results
+    Should Contain         reports/qa-results    reports
+    Should Be Equal        reports/qa-results    reports/qa-results
+    Should Contain         reports    reports
+    Should Not Be Empty    reports
+    Should Be Equal        reports    reports
+    Log                    ✅ OutputDir validated
+
+Test Report Commands
+    Log                    💻 Testing report commands
+    Should Contain         robot --report qa_report.html    report
+    Should Contain         robot --log detailed_log.html    log
+    Should Contain         robot --outputdir reports    outputdir
+    Should Contain         robot --timestampoutputs    timestamp
+    Should Contain         robot --splitlog    splitlog
+    Should Contain         robot --loglevel INFO    loglevel
+    Should Not Be Empty    robot --report qa_report.html
+    Should Not Be Empty    robot --log detailed_log.html
+    Should Not Be Empty    robot --outputdir reports
+    Should Not Be Empty    robot --timestampoutputs
+    Should Be Equal        robot --report qa_report.html    robot --report qa_report.html
+    Log                    ✅ Report commands validated</code></pre>
+        
+        <h3>🎯 Práctica reportes (4 min):</h3>
+        <p>1. Reporte básico: robot test.robot → Ver report.html, log.html, output.xml</p>
+        <p>2. Outputdir custom: robot --outputdir reports test.robot</p>
+        <p>3. Report personalizado: robot --report qa_report.html test.robot</p>
+        <p>4. Log personalizado: robot --log detailed_log.html test.robot</p>
+        <p>5. Sin log: robot --log NONE test.robot</p>
+        <p>6. Sin report: robot --report NONE test.robot</p>
+        <p>7. Timestamp auto: robot --timestampoutputs test.robot</p>
+        <p>8. Split log: robot --splitlog test.robot</p>
+        <p>9. Loglevel INFO: robot --loglevel INFO test.robot</p>
+        <p>10. Loglevel DEBUG: robot --loglevel DEBUG test.robot</p>
+        <p>11. Include tags: robot --include smoke --report smoke_report.html tests/</p>
+        <p>12. Reportes suite: robot --splitlog --report suite_report.html tests/</p>
+        <p>13. Merge reports: rebot --merge output1.xml output2.xml</p>
+        <p>14. Abrir report: Double-click report.html en browser</p>
+        <p>15. Compartir reports: Copy reports/ para email o servidor</p>
+
+        <h3>💡 Tip</h3>
+        <p>report.html = resumen ejecutivo. log.html = detalles técnicos</p>
+        
+        <h3>🚀 Siguiente</h3>
+        <p>Lección 015: Troubleshooting instalación común</p>
+    `,
+    topics: ["reports", "documentation", "html"],
+    hasCode: true,
+    hasExercise: true,
+    type: "standard"
+};

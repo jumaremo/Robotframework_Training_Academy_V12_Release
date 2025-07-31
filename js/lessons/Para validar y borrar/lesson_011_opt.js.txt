@@ -1,0 +1,170 @@
+/**
+ * Robot Framework Academy - Lesson 011 OPTIMIZED
+ * Git y TortoiseGit para QA Engineers
+ */
+
+const LESSON_011 = {
+    id: 11,
+    title: "Git y TortoiseGit para QA Engineers",
+    duration: "8 min",
+    level: "beginner",
+    section: "section-01",
+    type: "foundation",
+    content: `
+        <h2>🐙 Git TortoiseGit QA</h2>
+        <p>Control visual versiones QA Engineers. DIFF-COMMIT-PUSH = workflow diario.</p>
+        
+        <h3>🤖 Tests Git workflow:</h3>
+        <pre><code class="robot">*** Variables ***
+\${TEST_FILE}         login_test.robot
+\${COMMIT_MESSAGE}    QA: Added login automation
+\${REMOTE_REPO}       origin
+\${WORKFLOW_STEP}     1
+\${FILES_STAGED}      3
+\${CHANGES_FOUND}     True
+\${PUSH_SUCCESS}      True
+\${DIFF_STATUS}       True
+
+*** Test Cases ***
+Test DIFF Command QA
+    [Documentation]    Comando diario #1 para QA Engineers
+    Log                    🔍 DIFF: Comparando cambios tests
+    Should Not Be Empty    \${TEST_FILE}
+    Should Contain         \${TEST_FILE}    test
+    Should Be Equal        \${TEST_FILE}    login_test.robot
+    Should Be True         \${CHANGES_FOUND}
+    Should Be Equal        \${CHANGES_FOUND}    True
+    Should Not Be Empty    \${CHANGES_FOUND}
+    Should Contain         \${TEST_FILE}    login
+    Should Be Equal        login_test.robot    login_test.robot
+    Should Not Be Empty    login_test.robot
+    Should Contain         Right-click TortoiseGit Diff    Diff
+    Log                    ✅ DIFF: Cambios visualizados
+
+Test COMMIT Command QA
+    [Documentation]    Comando diario #2 para QA Engineers  
+    Log                    💾 COMMIT: Guardando versión tests
+    Should Not Be Empty    \${COMMIT_MESSAGE}
+    Should Contain         \${COMMIT_MESSAGE}    QA:
+    Should Be Equal        \${COMMIT_MESSAGE}    QA: Added login automation
+    Should Be True         \${FILES_STAGED} > 0
+    Should Be Equal As Numbers    \${FILES_STAGED}    3
+    Should Not Be Empty    \${FILES_STAGED}
+    Should Contain         \${COMMIT_MESSAGE}    Added
+    Should Be Equal        QA: Added login automation    QA: Added login automation
+    Should Not Be Empty    QA: Added login automation
+    Should Contain         Right-click TortoiseGit Commit    Commit
+    Log                    ✅ COMMIT: Versión guardada
+
+Test PUSH Command QA
+    [Documentation]    Comando diario #3 para QA Engineers
+    Log                    🚀 PUSH: Compartiendo tests equipo
+    Should Not Be Empty    \${REMOTE_REPO}
+    Should Contain         \${REMOTE_REPO}    origin
+    Should Be Equal        \${REMOTE_REPO}    origin
+    Should Be True         \${PUSH_SUCCESS}
+    Should Be Equal        \${PUSH_SUCCESS}    True
+    Should Not Be Empty    \${PUSH_SUCCESS}
+    Should Contain         origin    origin
+    Should Be Equal        origin    origin
+    Should Not Be Empty    origin
+    Should Contain         Right-click TortoiseGit Push    Push
+    Log                    ✅ PUSH: Tests disponibles equipo
+
+Test Workflow DIFF-COMMIT-PUSH
+    [Documentation]    Workflow diario completo QA Engineers
+    Log                    🔄 Workflow diario QA completo
+    Should Not Be Empty    \${WORKFLOW_STEP}
+    Should Be Equal As Numbers    \${WORKFLOW_STEP}    1
+    Should Be True         \${WORKFLOW_STEP} > 0
+    
+    # Validar DIFF
+    Should Be True         \${DIFF_STATUS}
+    Should Be Equal        \${DIFF_STATUS}    True
+    Should Not Be Empty    \${DIFF_STATUS}
+    
+    # Validar COMMIT
+    Should Not Be Empty    \${COMMIT_MESSAGE}
+    Should Contain         \${COMMIT_MESSAGE}    QA:
+    Should Be Equal        \${COMMIT_MESSAGE}    QA: Added login automation
+    
+    # Validar PUSH
+    Should Be True         \${PUSH_SUCCESS}
+    Should Be Equal        \${PUSH_SUCCESS}    True
+    Should Not Be Empty    \${PUSH_SUCCESS}
+    
+    # Workflow completo
+    Should Be Equal As Numbers    3    3
+    Should Be True         3 > 0
+    Should Not Be Empty    3
+    Log                    ✅ Workflow QA: DIFF→COMMIT→PUSH
+
+Test Git Commands Validation
+    [Documentation]    Validación comandos Git esenciales
+    Log                    🛠️ Validando comandos Git QA
+    Should Contain         git status    status
+    Should Contain         git add    add
+    Should Contain         git commit    commit
+    Should Contain         git push    push
+    Should Contain         git pull    pull
+    Should Not Be Empty    git status
+    Should Not Be Empty    git add
+    Should Not Be Empty    git commit
+    Should Not Be Empty    git push
+    Should Not Be Empty    git pull
+    Should Be Equal        git status    git status
+    Should Be Equal        git add    git add
+    Should Be Equal        git commit    git commit
+    Should Be Equal        git push    git push
+    Should Be Equal        git pull    git pull
+    Log                    ✅ Comandos Git validados
+
+Test TortoiseGit Interface
+    [Documentation]    Validación interfaz TortoiseGit
+    Log                    🖱️ Validando interfaz TortoiseGit
+    Should Contain         Right-click    Right
+    Should Contain         TortoiseGit    Tortoise
+    Should Contain         TortoiseGit    Git
+    Should Not Be Empty    Right-click
+    Should Not Be Empty    TortoiseGit
+    Should Be Equal        Right-click    Right-click
+    Should Be Equal        TortoiseGit    TortoiseGit
+    Should Contain         Visual interface    Visual
+    Should Contain         GUI workflow    GUI
+    Should Not Be Empty    Visual interface
+    Should Not Be Empty    GUI workflow
+    Should Be Equal        Visual interface    Visual interface
+    Should Be Equal        GUI workflow    GUI workflow
+    Log                    ✅ Interfaz TortoiseGit validada</code></pre>
+        
+        <h3>🎯 Práctica Git QA (6 min):</h3>
+        <p>1. Instalar TortoiseGit: tortoisegit.org → Download → Install</p>
+        <p>2. Configurar QA: Right-click → Settings → Name: "QA Engineer"</p>
+        <p>3. Crear repo: New Folder "robot-qa-tests" → Git Create Repository</p>
+        <p>4. Crear test: login_test.robot con código Robot Framework</p>
+        <p>5. **DIFF**: Modificar test → Right-click → TortoiseGit → **Diff**</p>
+        <p>6. Interpretar: **Rojo=eliminado**, **Verde=agregado**</p>
+        <p>7. **COMMIT**: Right-click → TortoiseGit → **Commit** → "QA: Added login"</p>
+        <p>8. Mensaje formato: **"QA: [Acción] [Descripción]"**</p>
+        <p>9. Ver historial: Right-click → Show Log → Ver commits</p>
+        <p>10. Crear logout_test.robot → DIFF diferencias</p>
+        <p>11. Commit múltiple: Select files → COMMIT mensaje QA</p>
+        <p>12. **PUSH**: Right-click → TortoiseGit → **Push** → Remote</p>
+        <p>13. Configurar remote: Push → Set URL GitHub/GitLab</p>
+        <p>14. Push exitoso: Verificar "Success" → Tests en equipo</p>
+        <p>15. Pull actualizar: Right-click → Pull → Bajar cambios equipo</p>
+        <p>16. Workflow diario: **DIFF** → **COMMIT** → **PUSH** → Repetir</p>
+        <p>17. Resolver conflictos: TortoiseGit → Resolve → Merge manual</p>
+        <p>18. Branch QA: Switch/Checkout → Create "feature/new-tests"</p>
+
+        <h3>💡 Tip</h3>
+        <p>DIFF antes commit = evitar código roto. PUSH diario = equipo sync</p>
+        
+        <h3>🚀 Siguiente</h3>
+        <p>Lección 012: Configuración requirements.txt</p>
+    `,
+    topics: ["git", "tortoisegit", "qa-automation", "diff-commit-push"],
+    hasCode: true,
+    hasExercise: true,
+    type: "foundation"
+};

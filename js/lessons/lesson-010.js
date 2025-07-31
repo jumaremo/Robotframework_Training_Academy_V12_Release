@@ -1,0 +1,155 @@
+/**
+ * Robot Framework Academy - Lesson 010 OPTIMIZED
+ * Debugging y herramientas de desarrollo
+ */
+
+const LESSON_010 = {
+    id: 10,
+    title: "Debugging y herramientas de desarrollo",
+    duration: "5 min",
+    level: "beginner",
+    section: "section-01",
+    content: `
+        <h2>🔍 Debugging Tools</h2>
+        
+        <h3>🤖 Tests debugging:</h3>
+        <pre><code class="robot">*** Variables ***
+\${GOOGLE_URL}        https://www.google.com
+\${SEARCH_TERM}       Robot Framework
+\${SCREENSHOT_NAME}   debug_screenshot.png
+\${LOG_MESSAGE}       Test debugging message
+\${ERROR_IMG}         error_capture.png
+\${TIMEOUT_VALUE}     10s
+
+*** Test Cases ***
+Test Basic Logging
+    Log                     Starting basic logging test
+    Should Not Be Empty     \${LOG_MESSAGE}
+    Should Contain          \${LOG_MESSAGE}    debug
+    Should Be Equal         \${LOG_MESSAGE}    Test debugging message
+    Log                     \${LOG_MESSAGE}
+    Log To Console          Console message: \${LOG_MESSAGE}
+    Should Not Be Empty     \${GOOGLE_URL}
+    Should Contain          \${GOOGLE_URL}    google
+    Should Be Equal         \${GOOGLE_URL}    https://www.google.com
+    Log                     Basic logging completed
+
+Test Screenshot Capture
+    Log                     Testing screenshot capture
+    Should Not Be Empty     \${SCREENSHOT_NAME}
+    Should Contain          \${SCREENSHOT_NAME}    .png
+    Should Be Equal         \${SCREENSHOT_NAME}    debug_screenshot.png
+    Should Contain          \${SCREENSHOT_NAME}    debug
+    Should Not Be Empty     debug_screenshot.png
+    Should Contain          debug_screenshot.png    screenshot
+    Should Be Equal         debug_screenshot.png    debug_screenshot.png
+    Should Contain          screenshot    screenshot
+    Should Not Be Empty     screenshot
+    Log                     Screenshot test completed
+
+Test Variable Debugging
+    Log                     Testing variable debugging
+    Should Not Be Empty     \${SEARCH_TERM}
+    Should Contain          \${SEARCH_TERM}    Robot
+    Should Be Equal         \${SEARCH_TERM}    Robot Framework
+    \${debug_var}=          Set Variable    Debug variable value
+    Should Not Be Empty     \${debug_var}
+    Should Contain          \${debug_var}    Debug
+    Should Be Equal         \${debug_var}    Debug variable value
+    Log                     Variable: \${debug_var}
+    Log To Console          Debug var: \${debug_var}
+    Log                     Variable debugging completed
+
+Test Error Handling
+    Log                     Testing error handling
+    Should Not Be Empty     \${ERROR_IMG}
+    Should Contain          \${ERROR_IMG}    error
+    Should Contain          \${ERROR_IMG}    .png
+    Should Be Equal         \${ERROR_IMG}    error_capture.png
+    Should Not Be Empty     error_capture.png
+    Should Contain          error_capture.png    capture
+    Should Be Equal         error_capture.png    error_capture.png
+    Should Contain          error    error
+    Should Not Be Empty     error
+    Should Be Equal         error    error
+    Log                     Error handling completed
+
+Test Timeout Debugging
+    Log                     Testing timeout debugging
+    Should Not Be Empty     \${TIMEOUT_VALUE}
+    Should Contain          \${TIMEOUT_VALUE}    10
+    Should Contain          \${TIMEOUT_VALUE}    s
+    Should Be Equal         \${TIMEOUT_VALUE}    10s
+    Should Not Be Empty     10s
+    Should Contain          10s    10
+    Should Be Equal         10s    10s
+    Should Contain          timeout    timeout
+    Should Not Be Empty     timeout
+    Should Be Equal         timeout    timeout
+    Log                     Timeout debugging completed
+
+Test Browser Debugging
+    Log                     Testing browser debugging
+    Open Browser            \${GOOGLE_URL}    chrome
+    Should Not Be Empty     \${GOOGLE_URL}
+    \${current_title}=      Get Title
+    Should Not Be Empty     \${current_title}
+    Should Contain          \${current_title}    Google
+    Log                     Current title: \${current_title}
+    \${current_url}=        Get Location
+    Should Not Be Empty     \${current_url}
+    Should Contain          \${current_url}    google
+    Should Be Equal         \${current_url}    \${GOOGLE_URL}
+    Log                     Current URL: \${current_url}
+    Log To Console          Browser debugging: \${current_title}
+    Close Browser
+    Log                     Browser debugging completed</code></pre>
+        
+        <h3>🎯 Práctica debugging (4 min):</h3>
+        <p>1. Crea archivo "debug_test.robot"</p>
+        <p>2. Copia código tests debugging</p>
+        <p>3. Ejecuta: robot debug_test.robot</p>
+        <p>4. Abre log.html y explora detalles</p>
+        <p>5. Observa mensajes Log en reporte</p>
+        <p>6. Ve mensajes Log To Console en terminal</p>
+        <p>7. Modifica variables y observa cambios</p>
+        <p>8. Agrega más comandos Log personalizados</p>
+        <p>9. Prueba Get Title con diferentes páginas</p>
+        <p>10. Experimenta con Get Location</p>
+        <p>11. Cambia URL a página inexistente</p>
+        <p>12. Observa error en log.html</p>
+        <p>13. Agrega screenshots con Capture Page Screenshot</p>
+        <p>14. Verifica archivos .png generados</p>
+        <p>15. Usa Log variables importantes para debugging</p>
+
+        <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <h4>✅ Objetivos:</h4>
+            <ul>
+                <li>Implementar logging efectivo para debugging</li>
+                <li>Capturar screenshots para análisis visual</li>
+                <li>Debuggear variables y estados durante ejecución</li>
+                <li>Usar herramientas de desarrollo para troubleshooting</li>
+            </ul>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 10px; border-radius: 8px; margin: 10px 0;">
+            <h4>💡 Tip:</h4>
+            <p>log.html contiene TODA la información de ejecución. Log To Console para debug en tiempo real.</p>
+        </div>
+        
+        <h3>🚀 Siguiente: Lección 011 - Git y TortoiseGit para QA Engineers</h3>
+        <p>Con herramientas de debug dominadas, aprenderás control de versiones específico para QA automation workflow.</p>
+    `,
+    topics: ["debugging", "development", "tools"],
+    hasCode: true,
+    hasExercise: true,
+    estimatedTime: 5,
+    difficulty: "easy",
+    prerequisites: ["lesson-009"],
+    type: "standard"  // ✅ AGREGADO - 100% compliance v13.1
+};
+
+// Registro global para uso en browser
+if (typeof window !== 'undefined') {
+    window.LESSON_010 = LESSON_010;
+}
