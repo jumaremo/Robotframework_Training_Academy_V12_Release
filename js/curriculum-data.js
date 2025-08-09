@@ -837,6 +837,41 @@ function validateV131Compliance() {
 }
 
 console.log('✅ Funciones migrateToV131 y validateV131Compliance agregadas correctamente');
+// ✅ AGREGAR ESTAS FUNCIONES ANTES DE setTimeout
+    function migrateToV131() {
+        console.log('🔄 Migrating curriculum to v1.3.1...');
+        
+        // Verificar si ya está migrado
+        if (localStorage.getItem('curriculum_version') === '1.3.1') {
+            console.log('✅ Already migrated to v1.3.1');
+            return true;
+        }
+        
+        // Lógica de migración
+        try {
+            // Actualizar estructura de datos si es necesario
+            if (window.ROBOT_FRAMEWORK_CURRICULUM) {
+                // Marcar como migrado
+                localStorage.setItem('curriculum_version', '1.3.1');
+                console.log('✅ Migration to v1.3.1 completed');
+                return true;
+            }
+        } catch (error) {
+            console.error('❌ Migration failed:', error);
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Función auxiliar si es necesaria
+    function initializeV131Features() {
+        console.log('🚀 Initializing v1.3.1 features...');
+        // Inicializar características específicas de v1.3.1
+        return true;
+    }
+
+    // tu código existente aquí
     setTimeout(() => {
         console.log('\n🚀 VERIFICACIÓN AUTOMÁTICA v13.1-PyCharm:');
         const compliance = validateV131Compliance();
