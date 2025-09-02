@@ -1,7 +1,6 @@
 /**
  * Robot Framework Academy - Enhanced Core System v3.1 - OPTIMIZED
  * Motor principal del sistema de entrenamiento con fixes críticos
- * Reorganizado y optimizado para mejor mantenibilidad
  */
 
 // ===== VARIABLES GLOBALES =====
@@ -110,7 +109,7 @@ function restoreSidebarState() {
                 toggleIcon.textContent = '››';
                 toggleIcon.parentElement.title = 'Mostrar menú';
             }
-            console.log('📁 Estado del sidebar restaurado: colapsado');
+            console.log('📐 Estado del sidebar restaurado: colapsado');
         }
     }
 }
@@ -129,7 +128,7 @@ function initializeCurriculum() {
 function loadAvailableLessons() {
     const lessons = {};
     
-    // Intentar cargar lecciones disponibles (001-251)
+    // Intentar cargar lecciones disponibles (001-251) - EXPANDIDO
     for (let i = 1; i <= 251; i++) {
         const lessonKey = `LESSON_${String(i).padStart(3, '0')}`;
         if (typeof window[lessonKey] !== 'undefined') {
@@ -145,26 +144,6 @@ function loadAvailableLessons() {
     
     window.RFAcademy.loadedLessons = lessons;
     console.log(`📖 Total lecciones cargadas: ${Object.keys(lessons).length}`);
-}
-
-function resyncAllLessons() {
-    console.log('🔄 Re-sincronizando lecciones...');
-    
-    const lessons = {};
-    for (let i = 1; i <= 251; i++) {
-        const lessonKey = `LESSON_${String(i).padStart(3, '0')}`;
-        if (typeof window[lessonKey] !== 'undefined') {
-            lessons[i] = window[lessonKey];
-        }
-    }
-    
-    window.RFAcademy.loadedLessons = lessons;
-    console.log(`✅ Re-sincronizado: ${Object.keys(lessons).length} lecciones`);
-    
-    // Regenerar sidebar con lecciones actualizadas
-    generateSidebar();
-    
-    return Object.keys(lessons).length;
 }
 
 // ===== GENERACIÓN DEL SIDEBAR =====
@@ -244,7 +223,7 @@ function createLessonsHTML(section) {
                         ${lesson.hasExercise ? '<span class="lesson-indicator has-exercise" title="Incluye ejercicios">🎯</span>' : ''}
                     </div>
                 </div>
-                <span class="lesson-status">${isCompleted ? '✅' : isAvailable ? '🔓' : '⏳'}</span>
+                <span class="lesson-status">${isCompleted ? '✅' : isAvailable ? '📝' : '⏳'}</span>
             </div>
         `;
     }).join('');
@@ -397,7 +376,7 @@ function navigateLesson(direction) {
     }
 }
 
-// ===== ACTUALIZACIONES DE UI =====
+// ===== UI UPDATES =====
 function updateCurrentLessonUI(lessonId) {
     // Actualizar items activos en sidebar
     document.querySelectorAll('.lesson-item').forEach(item => {
@@ -507,7 +486,7 @@ function updateLessonItemCompletedState(lessonId) {
         
         const statusSpan = lessonItem.querySelector('.lesson-status');
         if (statusSpan) {
-            statusSpan.textContent = isCompleted ? '✅' : '🔓';
+            statusSpan.textContent = isCompleted ? '✅' : '📝';
         }
     }
 }
@@ -845,7 +824,7 @@ function applyTheme(theme) {
     }
 }
 
-// ===== SIDEBAR TOGGLE SYSTEM =====
+// ===== SIDEBAR TOGGLE SYSTEM - FIXED =====
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainLayout = document.querySelector('.main-layout');
@@ -863,7 +842,7 @@ function toggleSidebar() {
             toggleIcon.textContent = '‹‹';
             toggleIcon.parentElement.title = 'Ocultar menú';
         }
-        console.log('📁 Sidebar expandido');
+        console.log('📐 Sidebar expandido');
     } else {
         // Colapsar sidebar
         sidebar.classList.add('collapsed');
@@ -872,7 +851,7 @@ function toggleSidebar() {
             toggleIcon.textContent = '››';
             toggleIcon.parentElement.title = 'Mostrar menú';
         }
-        console.log('📁 Sidebar colapsado');
+        console.log('📐 Sidebar colapsado');
     }
     
     saveSettings();
@@ -1018,7 +997,7 @@ function confirmResetProgress() {
         item.classList.remove('completed');
         const status = item.querySelector('.lesson-status');
         if (status && window.RFAcademy.loadedLessons[parseInt(item.dataset.lessonId)]) {
-            status.textContent = '🔓';
+            status.textContent = '📝';
         }
     });
     
@@ -1096,6 +1075,7 @@ function closeModal() {
     }
 }
 
+// ===== FUNCIÓN HELP MODAL CORREGIDA =====
 function showHelpModal() {
     showModal(`
         <div class="modal-header">
@@ -1137,6 +1117,14 @@ function showHelpModal() {
                 <li><strong>Ctrl + H:</strong> Mostrar ayuda</li>
                 <li><strong>Ctrl + D:</strong> Cambiar tema</li>
                 <li><strong>← →:</strong> Navegar entre lecciones</li>
+            </ul>
+            
+            <h3>🔍 Búsqueda Avanzada</h3>
+            <ul>
+                <li><strong>Por título:</strong> Escribe parte del nombre de la lección</li>
+                <li><strong>Por número:</strong> Escribe "001", "1", "042", etc.</li>
+                <li><strong>Por tema:</strong> "selenium", "api", "variables", etc.</li>
+                <li><strong>Por sección:</strong> "fundamentos", "control", etc.</li>
             </ul>
         </div>
         <div class="modal-footer">
@@ -1186,7 +1174,7 @@ function goToLessonsDetailed() {
     }
 }
 
-// ===== FUNCIONES DEL CURRICULUM =====
+// ===== FUNCIONES ACTUALIZADAS DEL CURRICULUM - FIXED =====
 function showCurriculum() {
     console.log('📚 Ejecutando showCurriculum...');
     
@@ -1196,7 +1184,7 @@ function showCurriculum() {
         const lessonActions = document.getElementById('lessonActions');
         const breadcrumb = document.getElementById('breadcrumb');
         
-        // Validación crítica
+        // VALIDACIÓN CRÍTICA AGREGADA
         if (!lessonContent) {
             console.error('❌ Element lessonContent not found');
             showToast('Error mostrando curriculum - elemento no encontrado', 'error');
@@ -1220,7 +1208,7 @@ function showCurriculum() {
         // Generar contenido del curriculum
         const curriculumHTML = generateCurriculumHTML();
         
-        // Validación del HTML generado
+        // VALIDACIÓN DEL HTML GENERADO
         if (!curriculumHTML || curriculumHTML.trim() === '') {
             console.error('❌ Generated curriculum HTML is empty');
             showToast('Error generando contenido del curriculum', 'error');
@@ -1325,6 +1313,80 @@ function generateCurriculumHTML() {
                 </div>
             </div>
             
+            <!-- Estadísticas por Nivel -->
+            <div class="level-stats">
+                <h2>📊 Distribución por Nivel</h2>
+                <div class="level-stats-grid">
+                    <div class="level-stat beginner">
+                        <div class="level-icon">🟢</div>
+                        <div class="level-info">
+                            <h3>Básico</h3>
+                            <p>${stats.beginner.lessons} lecciones</p>
+                            <p>${Math.round(stats.beginner.total / 60)}h total</p>
+                            <p>Promedio: ${stats.beginner.avgDuration} min</p>
+                            <div class="level-description">
+                                Setup, sintaxis, fundamentos de Robot Framework
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-stat intermediate">
+                        <div class="level-icon">🟡</div>
+                        <div class="level-info">
+                            <h3>Intermedio</h3>
+                            <p>${stats.intermediate.lessons} lecciones</p>
+                            <p>${Math.round(stats.intermediate.total / 60)}h total</p>
+                            <p>Promedio: ${stats.intermediate.avgDuration} min</p>
+                            <div class="level-description">
+                                APIs, mobile, data-driven testing
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-stat advanced">
+                        <div class="level-icon">🔴</div>
+                        <div class="level-info">
+                            <h3>Avanzado</h3>
+                            <p>${stats.advanced.lessons} lecciones</p>
+                            <p>${Math.round(stats.advanced.total / 60)}h total</p>
+                            <p>Promedio: ${stats.advanced.avgDuration} min</p>
+                            <div class="level-description">
+                                CI/CD, performance, arquitecturas enterprise
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tiempos Optimizados -->
+            <div class="duration-info">
+                <h2>⏱️ Tiempos Optimizados</h2>
+                <div class="duration-grid">
+                    <div class="duration-card">
+                        <h3>🟢 Básico</h3>
+                        <ul>
+                            <li><strong>Estándar:</strong> 5 min</li>
+                            <li><strong>Foundation:</strong> 8 min</li>
+                            <li><strong>Integration:</strong> 10 min</li>
+                        </ul>
+                    </div>
+                    <div class="duration-card">
+                        <h3>🟡 Intermedio</h3>
+                        <ul>
+                            <li><strong>Estándar:</strong> 7 min</li>
+                            <li><strong>Foundation:</strong> 10 min</li>
+                            <li><strong>Integration:</strong> 15 min</li>
+                        </ul>
+                    </div>
+                    <div class="duration-card">
+                        <h3>🔴 Avanzado</h3>
+                        <ul>
+                            <li><strong>Estándar:</strong> 10 min</li>
+                            <li><strong>Foundation:</strong> 15 min</li>
+                            <li><strong>Capstone:</strong> 20-25 min</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Secciones del Curriculum -->
             <div class="curriculum-sections">
                 <h2>🗂️ Secciones del Curriculum</h2>
@@ -1333,13 +1395,13 @@ function generateCurriculumHTML() {
             
             <!-- Acciones del Curriculum -->
             <div class="curriculum-actions">
-                <button class="cta-primary" onclick="startLearning()">
+                <button class="cta-primary" onclick="window.startLearning ? startLearning() : console.log('startLearning no disponible')">
                     🚀 Comenzar Aprendizaje
                 </button>
-                <button class="cta-secondary" onclick="showWelcome()">
+                <button class="cta-secondary" onclick="window.showWelcome ? showWelcome() : console.log('showWelcome no disponible')">
                     🏠 Volver al Inicio
                 </button>
-                <button class="cta-secondary" onclick="goToLessonsDetailed()">
+                <button class="cta-secondary" onclick="window.goToLessonsDetailed ? goToLessonsDetailed() : console.log('goToLessonsDetailed no disponible')">
                     📋 Ver Lecciones Detalladas
                 </button>
             </div>
@@ -1505,15 +1567,6 @@ function setupEventListeners() {
             }
         }
     });
-    
-    // Listener para carga dinámica completada - CORRECTAMENTE UBICADO
-    document.addEventListener('lessonsLoaded', function(event) {
-        console.log('🎯 Evento lessonsLoaded recibido, re-sincronizando...');
-        setTimeout(() => {
-            resyncAllLessons();
-            console.log('✅ Sistema totalmente sincronizado');
-        }, 500);
-    });
 }
 
 // ===== INICIALIZACIÓN FINAL =====
@@ -1547,11 +1600,10 @@ window.RFAcademyDebug = {
     resetAll: confirmResetProgress,
     curriculum: () => window.RFAcademy.curriculum,
     toggleSidebar: toggleSidebar,
-    searchLessons: (query) => window.RFAcademy.curriculum?.utils?.searchLessons(query),
-    resyncLessons: resyncAllLessons
+    searchLessons: (query) => window.RFAcademy.curriculum?.utils?.searchLessons(query)
 };
 
-// ===== EXPOSICIÓN GLOBAL DE FUNCIONES =====
+// Exponer funciones principales globalmente para onclick
 window.startLearning = startLearning;
 window.showWelcome = showWelcome;
 window.goToLessonsDetailed = goToLessonsDetailed;
@@ -1562,10 +1614,9 @@ window.toggleLessonComplete = toggleLessonComplete;
 window.applyFilter = applyFilter;
 window.toggleSection = toggleSection;
 window.showComingSoon = showComingSoon;
-window.resyncAllLessons = resyncAllLessons;
 
 console.log('🎓 Robot Framework Academy Core v3.1 - OPTIMIZED cargado correctamente');
 console.log('🔧 Debug disponible en: window.RFAcademyDebug');
 console.log('🌐 Funciones globales expuestas para botones onclick');
 console.log('🔍 Sistema de búsqueda optimizado integrado');
-console.log('✅ Fixes críticos aplicados - Sistema completamente funcional');
+console.log('✅ Fixes críticos aplicados - showCurriculum() funcional');
