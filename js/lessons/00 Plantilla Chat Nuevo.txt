@@ -18,6 +18,8 @@ FORMATO VISUAL: objetivos con fondo azul #f0f9ff, tip con fondo amarillo #fff3cd
 OPTIMIZAR: 85%+ práctica, headers ≤5 palabras, 20+ comandos RF verificables.
 REGLAS: Simple, español, directo al grano, eliminar teoría innecesaria.
 
+Compartimos ejemplos de lecciones de nivel básico, intermedio y avanzado como referencia.
+
 *****
 
 Generar lección XXX usando curriculum-data.js y template simple.
