@@ -1,4 +1,4 @@
-// access-control.js - Sistema simplificado con una contraseña maestra
+// access-control.js - Versión con form correcto
 
 class SimpleAccessControl {
     constructor() {
@@ -6,28 +6,40 @@ class SimpleAccessControl {
         this.masterPassword = 'UDEMY-ROBOT-2025-PRO';
         
         this.isAuthenticated = this.checkAuthentication();
-        this.init();
+        console.log('🔐 Sistema iniciado, autenticado:', this.isAuthenticated);
+        
+        // Esperar a que el DOM esté completamente listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        } else {
+            this.init();
+        }
     }
 
     init() {
-        // Si no está autenticado, mostrar modal de login
-        if (!this.isAuthenticated) {
-            this.showAccessModal();
-        }
+        console.log('🚀 Inicializando sistema de acceso...');
         
-        // Bloquear contenido hasta autenticarse
-        this.protectContent();
+        // Crear modal primero
         this.createAccessModal();
+        
+        // Luego configurar contenido y eventos
+        setTimeout(() => {
+            if (!this.isAuthenticated) {
+                this.protectContent();
+                this.showAccessModal();
+            } else {
+                console.log('✅ Usuario ya autenticado, desbloqueando contenido...');
+                this.unlockContent();
+            }
+        }, 500);
     }
 
-    // Verificar si ya está autenticado
     checkAuthentication() {
         const authToken = localStorage.getItem('udemy_access_token');
         const authTime = localStorage.getItem('udemy_auth_time');
         
         if (!authToken || !authTime) return false;
         
-        // Token válido por 30 días
         const thirtyDays = 30 * 24 * 60 * 60 * 1000;
         const isExpired = (Date.now() - parseInt(authTime)) > thirtyDays;
         
@@ -36,17 +48,17 @@ class SimpleAccessControl {
             return false;
         }
         
-        // Verificar que el token coincida con la contraseña actual
         const expectedToken = btoa(this.masterPassword + 'salt2025');
         return authToken === expectedToken;
     }
 
-    // Autenticar usuario
     authenticate(password) {
         const cleanPassword = password.trim().toUpperCase();
+        console.log('🔑 Intentando autenticar...');
         
         if (cleanPassword === this.masterPassword) {
-            // Crear token de autenticación
+            console.log('✅ Contraseña correcta!');
+            
             const token = btoa(this.masterPassword + 'salt2025');
             localStorage.setItem('udemy_access_token', token);
             localStorage.setItem('udemy_auth_time', Date.now().toString());
@@ -58,33 +70,40 @@ class SimpleAccessControl {
             return true;
         }
         
+        console.log('❌ Contraseña incorrecta');
         return false;
     }
 
-    // Proteger todo el contenido
     protectContent() {
-        if (!this.isAuthenticated) {
-            // Bloquear todo el contenido principal
-            const mainContent = document.querySelector('.main-content');
-            const sidebar = document.querySelector('.sidebar');
-            
-            if (mainContent) {
-                mainContent.style.filter = 'blur(5px)';
-                mainContent.style.pointerEvents = 'none';
-                mainContent.style.userSelect = 'none';
-            }
-            
-            if (sidebar) {
-                sidebar.style.filter = 'blur(3px)';
-                sidebar.style.pointerEvents = 'none';
-            }
+        console.log('🔒 Protegiendo contenido...');
+        
+        const mainContent = document.querySelector('.main-content');
+        const sidebar = document.querySelector('.sidebar');
+        const appHeader = document.querySelector('.app-header');
+        
+        if (mainContent) {
+            mainContent.style.filter = 'blur(5px)';
+            mainContent.style.pointerEvents = 'none';
+            mainContent.style.userSelect = 'none';
+        }
+        
+        if (sidebar) {
+            sidebar.style.filter = 'blur(3px)';
+            sidebar.style.pointerEvents = 'none';
+        }
+
+        if (appHeader) {
+            appHeader.style.filter = 'blur(2px)';
+            appHeader.style.pointerEvents = 'none';
         }
     }
 
-    // Desbloquear contenido
     unlockContent() {
+        console.log('🔓 Desbloqueando contenido...');
+        
         const mainContent = document.querySelector('.main-content');
         const sidebar = document.querySelector('.sidebar');
+        const appHeader = document.querySelector('.app-header');
         
         if (mainContent) {
             mainContent.style.filter = 'none';
@@ -96,12 +115,23 @@ class SimpleAccessControl {
             sidebar.style.filter = 'none';
             sidebar.style.pointerEvents = 'auto';
         }
+
+        if (appHeader) {
+            appHeader.style.filter = 'none';
+            appHeader.style.pointerEvents = 'auto';
+        }
     }
 
-    // Crear modal de acceso
     createAccessModal() {
+        console.log('🎨 Creando modal de acceso...');
+        
+        const existingModal = document.getElementById('accessControlModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
         const modalHTML = `
-            <div id="accessControlModal" class="access-control-modal">
+            <div id="accessControlModal" class="access-control-modal" style="display: none;">
                 <div class="access-modal-content">
                     <div class="access-header">
                         <div class="access-icon">🔐</div>
@@ -115,18 +145,22 @@ class SimpleAccessControl {
                             Ingresa la contraseña que se proporciona en las lecciones del curso.
                         </p>
                         
-                        <div class="password-input-container">
+                        <!-- FORM CORREGIDO -->
+                        <form id="accessForm" class="password-input-container" autocomplete="off">
                             <input 
-                                type="password" 
+                                type="text" 
                                 id="masterPasswordInput" 
+                                name="access_code"
                                 placeholder="Ingresa la contraseña del curso"
                                 class="access-input"
                                 maxlength="30"
+                                autocomplete="off"
+                                spellcheck="false"
                             >
-                            <button id="accessSubmitBtn" class="access-btn-primary">
+                            <button type="submit" id="accessSubmitBtn" class="access-btn-primary">
                                 🚀 Acceder a la Academia
                             </button>
-                        </div>
+                        </form>
                         
                         <div id="accessMessage" class="access-message"></div>
                         
@@ -139,7 +173,7 @@ class SimpleAccessControl {
                             </ul>
                             <p class="help-note">
                                 <strong>¿No tienes el curso?</strong> 
-                                <a href="https://www.udemy.com/course/tu-curso/" target="_blank" style="color: #007cba;">
+                                <a href="https://www.udemy.com/course/tu-curso/" target="_blank" style="color: #ffd700;">
                                     Adquiérelo aquí
                                 </a>
                             </p>
@@ -149,9 +183,8 @@ class SimpleAccessControl {
             </div>
         `;
 
-        // Agregar estilos CSS
         const styles = `
-            <style>
+            <style id="access-control-styles">
                 .access-control-modal {
                     position: fixed;
                     top: 0;
@@ -261,6 +294,11 @@ class SimpleAccessControl {
                     transform: translateY(-2px);
                 }
 
+                .access-btn-primary:active {
+                    transform: translateY(0);
+                    background: rgba(255,255,255,0.4);
+                }
+
                 .access-message {
                     min-height: 20px;
                     text-align: center;
@@ -324,7 +362,17 @@ class SimpleAccessControl {
                     text-decoration: underline;
                 }
 
-                /* Responsive */
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+                    20%, 40%, 60%, 80% { transform: translateX(10px); }
+                }
+                
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+
                 @media (max-width: 768px) {
                     .access-modal-content {
                         margin: 20px;
@@ -350,30 +398,35 @@ class SimpleAccessControl {
             </style>
         `;
 
-        // Agregar al DOM
-        document.head.insertAdjacentHTML('beforeend', styles);
+        if (!document.getElementById('access-control-styles')) {
+            document.head.insertAdjacentHTML('beforeend', styles);
+        }
         document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        setTimeout(() => this.bindModalEvents(), 100);
+        console.log('✅ Modal creado y eventos vinculados');
     }
 
-    // Mostrar modal de acceso
     showAccessModal() {
+        console.log('👀 Mostrando modal de acceso...');
+        
         const modal = document.getElementById('accessControlModal');
         if (modal) {
             modal.style.display = 'flex';
             
-            // Focus en input
             setTimeout(() => {
                 const input = document.getElementById('masterPasswordInput');
-                if (input) input.focus();
+                if (input) {
+                    input.focus();
+                    console.log('✅ Focus establecido');
+                }
             }, 300);
-            
-            // Bind events
-            this.bindModalEvents();
         }
     }
 
-    // Ocultar modal de acceso
     hideAccessModal() {
+        console.log('👋 Ocultando modal...');
+        
         const modal = document.getElementById('accessControlModal');
         if (modal) {
             modal.style.animation = 'modalSlideIn 0.3s ease-in reverse';
@@ -383,26 +436,56 @@ class SimpleAccessControl {
         }
     }
 
-    // Vincular eventos del modal
     bindModalEvents() {
-        const submitBtn = document.getElementById('accessSubmitBtn');
-        const passwordInput = document.getElementById('masterPasswordInput');
-
-        if (submitBtn) {
-            submitBtn.onclick = () => this.handleSubmit();
+        console.log('🔗 Vinculando eventos...');
+        
+        // EVENTO DE FORM (Principal)
+        const form = document.getElementById('accessForm');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                console.log('📝 Form enviado');
+                this.handleSubmit();
+            });
+            console.log('✅ Evento submit del form vinculado');
         }
 
+        // EVENTO DE BOTÓN (Respaldo)
+        const submitBtn = document.getElementById('accessSubmitBtn');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('🖱️ Botón clickeado');
+                this.handleSubmit();
+            });
+            console.log('✅ Evento click del botón vinculado');
+        }
+
+        // EVENTO DE INPUT (Enter)
+        const passwordInput = document.getElementById('masterPasswordInput');
         if (passwordInput) {
-            passwordInput.onkeypress = (e) => {
-                if (e.key === 'Enter') this.handleSubmit();
-            };
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    console.log('⌨️ Enter presionado');
+                    this.handleSubmit();
+                }
+            });
+            console.log('✅ Evento keydown del input vinculado');
         }
     }
 
-    // Manejar envío de contraseña
     handleSubmit() {
+        console.log('📝 Procesando envío...');
+        
         const passwordInput = document.getElementById('masterPasswordInput');
+        if (!passwordInput) {
+            console.error('❌ Input no encontrado');
+            return;
+        }
+        
         const password = passwordInput.value;
+        console.log('🔍 Password:', password ? '[PRESENTE]' : '[VACÍA]');
 
         if (!password.trim()) {
             this.showAccessMessage('Por favor ingresa la contraseña', 'error');
@@ -416,19 +499,19 @@ class SimpleAccessControl {
             passwordInput.value = '';
             passwordInput.focus();
             
-            // Efecto de shake en el modal
             const modal = document.querySelector('.access-modal-content');
             if (modal) {
                 modal.style.animation = 'shake 0.5s ease-in-out';
                 setTimeout(() => {
-                    modal.style.animation = '';
+                    modal.style.animation = 'modalSlideIn 0.5s ease-out';
                 }, 500);
             }
         }
     }
 
-    // Mostrar mensaje en el modal
     showAccessMessage(message, type) {
+        console.log(`💬 Mensaje: ${message} (${type})`);
+        
         const messageEl = document.getElementById('accessMessage');
         if (messageEl) {
             messageEl.textContent = message;
@@ -437,9 +520,9 @@ class SimpleAccessControl {
         }
     }
 
-    // Mostrar mensaje de éxito
     showSuccessMessage() {
-        // Crear toast notification
+        console.log('🎉 Mensaje de éxito');
+        
         const toast = document.createElement('div');
         toast.className = 'access-success-toast';
         toast.innerHTML = `
@@ -449,22 +532,20 @@ class SimpleAccessControl {
             </div>
         `;
         
-        toast.style.position = 'fixed';
-        toast.style.top = '20px';
-        toast.style.right = '20px';
-        toast.style.zIndex = '10001';
-        toast.style.animation = 'slideInRight 0.5s ease-out';
-        
+        toast.style.cssText = 'position:fixed;top:20px;right:20px;z-index:10001;animation:slideInRight 0.5s ease-out';
         document.body.appendChild(toast);
         
-        // Remover toast después de 4 segundos
         setTimeout(() => {
             toast.style.animation = 'slideInRight 0.5s ease-in reverse';
             setTimeout(() => toast.remove(), 500);
         }, 4000);
     }
 
-    // Cerrar sesión (opcional, para testing)
+    clearAuthentication() {
+        localStorage.removeItem('udemy_access_token');
+        localStorage.removeItem('udemy_auth_time');
+    }
+
     logout() {
         this.clearAuthentication();
         this.isAuthenticated = false;
@@ -472,80 +553,48 @@ class SimpleAccessControl {
         this.showAccessModal();
         console.log('🔐 Sesión cerrada');
     }
-
-    // Limpiar autenticación
-    clearAuthentication() {
-        localStorage.removeItem('udemy_access_token');
-        localStorage.removeItem('udemy_auth_time');
-    }
-
-    // Cambiar contraseña (para administrador)
-    changePassword(newPassword) {
-        this.masterPassword = newPassword.toUpperCase();
-        this.clearAuthentication();
-        console.log('🔑 Contraseña actualizada. Los usuarios deberán re-autenticarse.');
-    }
-
-    // Obtener información de acceso
-    getAccessInfo() {
-        return {
-            isAuthenticated: this.isAuthenticated,
-            authTime: localStorage.getItem('udemy_auth_time'),
-            remainingDays: this.getRemainingDays()
-        };
-    }
-
-    // Obtener días restantes de acceso
-    getRemainingDays() {
-        const authTime = localStorage.getItem('udemy_auth_time');
-        if (!authTime) return 0;
-        
-        const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-        const elapsed = Date.now() - parseInt(authTime);
-        const remaining = thirtyDays - elapsed;
-        
-        return Math.max(0, Math.ceil(remaining / (24 * 60 * 60 * 1000)));
-    }
 }
 
-// Agregar animaciones CSS adicionales
-const additionalStyles = `
-    <style>
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-            20%, 40%, 60%, 80% { transform: translateX(10px); }
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-    </style>
-`;
+// INICIALIZACIÓN MEJORADA
+console.log('🔄 Cargando sistema...');
 
-document.head.insertAdjacentHTML('beforeend', additionalStyles);
-
-// Inicializar sistema de acceso cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🔐 Iniciando sistema de acceso...');
+function initAccessControl() {
+    console.log('🚀 Iniciando control de acceso...');
     window.accessControl = new SimpleAccessControl();
     
-    // Funciones globales para administración (solo para testing)
+    // Funciones de administración
     window.adminLogout = () => window.accessControl.logout();
-    window.adminChangePassword = (newPass) => window.accessControl.changePassword(newPass);
-    window.adminAccessInfo = () => console.log(window.accessControl.getAccessInfo());
+    window.adminTest = () => {
+        console.log('🧪 Estado del sistema:');
+        console.log('- Autenticado:', window.accessControl.isAuthenticated);
+        console.log('- Modal:', !!document.getElementById('accessControlModal'));
+        console.log('- Form:', !!document.getElementById('accessForm'));
+        console.log('- Botón:', !!document.getElementById('accessSubmitBtn'));
+        console.log('- Input:', !!document.getElementById('masterPasswordInput'));
+    };
+    
+    // Función para testing rápido
+    window.testPassword = (pass) => {
+        const input = document.getElementById('masterPasswordInput');
+        if (input) {
+            input.value = pass || 'UDEMY-ROBOT-2025-PRO';
+            window.accessControl.handleSubmit();
+        }
+    };
+}
+
+// Múltiples métodos de inicialización
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAccessControl);
+} else {
+    setTimeout(initAccessControl, 100);
+}
+
+window.addEventListener('load', () => {
+    if (!window.accessControl) {
+        console.log('🔄 Inicialización de respaldo...');
+        initAccessControl();
+    }
 });
 
-// Prevenir bypass por consola
-(function() {
-    const originalLog = console.log;
-    console.log = function() {
-        // Detectar intentos de bypass
-        const args = Array.from(arguments).join(' ');
-        if (args.includes('bypass') || args.includes('unlock') || args.includes('hack')) {
-            return; // No mostrar información sensible
-        }
-        originalLog.apply(console, arguments);
-    };
-})();
+console.log('✅ Script cargado completamente');
